@@ -3,7 +3,7 @@ import React from 'react';
 
 import { places, PlacesMap } from '@features/places';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 /**
  * Страница карты мест.
@@ -16,11 +16,6 @@ const MapPage: React.FC = () => (
         <Title level={2} className="map-page__title">
           Карта мест
         </Title>
-      </Col>
-      <Col span={24}>
-        <Paragraph className="map-page__subtitle">
-          Выберите точку на карте, чтобы открыть ленту изображений.
-        </Paragraph>
       </Col>
     </Row>
     <PlacesMap places={places} />

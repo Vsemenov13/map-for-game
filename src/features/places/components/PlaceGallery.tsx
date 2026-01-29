@@ -1,12 +1,7 @@
 import { Card, Image } from 'antd';
 import React from 'react';
 
-import { PlaceImage } from '../model/types';
-
-/** Пропсы компонента. */
-type PlaceGalleryProps = {
-  images: PlaceImage[];
-};
+import type { PlaceGalleryProps } from '../types';
 
 /**
  * Галерея изображений места.

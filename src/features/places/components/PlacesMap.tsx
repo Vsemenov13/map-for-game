@@ -1,44 +1,71 @@
-import { Button, Card, Image } from 'antd';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Card } from 'antd';
+import React, { useCallback, useState } from 'react';
 
-import { Place } from '../model/types';
-
-/** Ссылка на изображение карты. */
-const mapImage =
-  'https://upload.wikimedia.org/wikipedia/commons/b/bc/BlankMap-World-Compact.svg';
-
-/** Пропсы компонента. */
-type PlacesMapProps = {
-  places: Place[];
-};
+import { MapCanvasDesktop } from './MapCanvasDesktop';
+import { MapCanvasMobile } from './MapCanvasMobile';
+import { MapZoomButtons } from './MapZoomButtons';
+import { MAP_IMAGE, MOBILE_BREAKPOINT, SCALE_STEP } from '../constants';
+import { useBodyOverflowX, useMediaQuery } from '../hooks';
+import type { ImageSize, PlacesMapProps } from '../types';
+import { clampScale, computeContentSize, getInitialScale } from '../utils';
 
 /**
- * Карта с кликабельными местами.
- * @param props - Свойства компонента.
+ * Карта с кликабельными местами, зумом и адаптивной вёрсткой.
  * @returns Компонент.
  */
-export const PlacesMap: React.FC<PlacesMapProps> = ({ places }) => (
-  <Card className="map-page__card" bordered={false}>
-    <div className="map-page__map">
-      <Image
-        className="map-page__image"
-        src={mapImage}
-        alt="Карта с местами"
-        preview={false}
-      />
-      {places.map((place) => (
-        <Link
-          key={place.id}
-          to={`/place/${place.id}`}
-          className={`map-page__pin ${place.pinClass}`}
-          aria-label={`Открыть ${place.title}`}
-        >
-          <Button size="small" className="map-page__pin-button">
-            {place.title}
-          </Button>
-        </Link>
-      ))}
-    </div>
-  </Card>
-);
+export const PlacesMap: React.FC<PlacesMapProps> = ({ places }) => {
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  useBodyOverflowX(isMobile);
+
+  const [scale, setScale] = useState(getInitialScale);
+  const [imageSize, setImageSize] = useState<ImageSize | null>(null);
+
+  /** Обработчик загрузки изображения карты — сохраняет размер для расчёта контента. */
+  const handleImageLoad = useCallback(
+    (ev: React.SyntheticEvent<HTMLImageElement>) => {
+      const img = ev.currentTarget;
+      if (img.naturalWidth && img.naturalHeight) {
+        setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
+      }
+    },
+    [],
+  );
+
+  /** Увеличить масштаб карты на один шаг. */
+  const zoomIn = useCallback(() => {
+    setScale((scale) => clampScale(scale, SCALE_STEP, isMobile));
+  }, [isMobile]);
+
+  /** Уменьшить масштаб карты на один шаг. */
+  const zoomOut = useCallback(() => {
+    setScale((scale) => clampScale(scale, -SCALE_STEP, isMobile));
+  }, [isMobile]);
+
+  const { width: contentWidth, height: contentHeight } = computeContentSize(
+    imageSize,
+    scale,
+  );
+
+  return (
+    <Card className="map-page__card" bordered={false}>
+      <MapZoomButtons onZoomIn={zoomIn} onZoomOut={zoomOut} />
+      <div className="map-page__map">
+        {isMobile ? (
+          <MapCanvasMobile
+            places={places}
+            mapImage={MAP_IMAGE}
+            contentWidth={contentWidth}
+            contentHeight={contentHeight}
+            onImageLoad={handleImageLoad}
+          />
+        ) : (
+          <MapCanvasDesktop
+            places={places}
+            mapImage={MAP_IMAGE}
+            onImageLoad={handleImageLoad}
+          />
+        )}
+      </div>
+    </Card>
+  );
+};
