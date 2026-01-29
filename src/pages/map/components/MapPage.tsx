@@ -1,0 +1,30 @@
+import React from 'react';
+import { Col, Row, Space, Typography } from 'antd';
+
+import { places, PlacesMap } from '@features/places';
+
+const { Title, Paragraph } = Typography;
+
+/**
+ * Страница карты мест.
+ * @returns Компонент.
+ */
+const MapPage: React.FC = () => (
+  <Space className="map-page" direction="vertical" size="large">
+    <Row className="map-page__header" justify="center">
+      <Col span={24}>
+        <Title level={2} className="map-page__title">
+          Карта мест
+        </Title>
+      </Col>
+      <Col span={24}>
+        <Paragraph className="map-page__subtitle">
+          Выберите точку на карте, чтобы открыть ленту изображений.
+        </Paragraph>
+      </Col>
+    </Row>
+    <PlacesMap places={places} />
+  </Space>
+);
+
+export default MapPage;

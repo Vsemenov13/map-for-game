@@ -4,8 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import '@styles/main.css';
 import 'antd/dist/antd.css';
+import '@styles/main.css';
 
 import { AppRoutes } from '@src/routes';
 

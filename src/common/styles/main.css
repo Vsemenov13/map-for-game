@@ -1,0 +1,286 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #0e1a2b;
+  background-color: #f6f8fb;
+}
+
+main {
+  min-height: 100vh;
+}
+
+.app-header,
+.app-footer {
+  background: #0f1f3d;
+  color: #ffffff;
+  padding: 16px 24px;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-header__link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.map-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 32px;
+  gap: 20px;
+  width: 100%;
+}
+
+.map-page.ant-space {
+  width: 100%;
+}
+
+.map-page__header {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+.map-page__title {
+  margin: 0 0 12px;
+  font-size: 32px;
+  text-align: center;
+  width: 100%;
+}
+
+.map-page__subtitle {
+  margin: 0;
+  color: #4b5d73;
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.map-page__map {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #ffffff;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  min-height: 60vh;
+}
+
+.map-page__image {
+  width: 100%;
+  display: block;
+}
+
+.map-page__image .ant-image-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.map-page__card {
+  max-width: 100%;
+  margin: 0;
+  border-radius: 24px;
+  box-shadow: 0 16px 35px rgba(16, 24, 40, 0.12);
+  width: 100%;
+}
+
+.map-page__card .ant-card-body {
+  padding: 0;
+}
+
+.map-page__pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  text-decoration: none;
+}
+
+.map-page__pin-button.ant-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  box-shadow: 0 6px 14px rgba(16, 24, 40, 0.12);
+  border: none;
+  background: #ffffff;
+  color: #1c2c4e;
+  font-weight: 600;
+  padding: 4px 10px;
+}
+
+.map-page__pin-button.ant-btn::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff7a59;
+  box-shadow: 0 0 0 4px rgba(255, 122, 89, 0.2);
+}
+
+.map-page__pin-button.ant-btn span {
+  white-space: nowrap;
+}
+
+.map-page__pin--forest {
+  top: 34%;
+  left: 26%;
+}
+
+.map-page__pin--mountains {
+  top: 22%;
+  left: 66%;
+}
+
+.map-page__pin--lake {
+  top: 64%;
+  left: 58%;
+}
+
+.place-page {
+  padding: 32px 24px 60px;
+  width: 100%;
+}
+
+.place-page.ant-space {
+  width: 100%;
+}
+
+.place-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto 32px;
+  width: 100%;
+}
+
+.place-page__header-action {
+  display: flex;
+  justify-content: center;
+}
+
+.place-page__title {
+  margin: 0 0 8px;
+  font-size: 32px;
+  text-align: center;
+  width: 100%;
+}
+
+.place-page__subtitle {
+  margin: 0;
+  color: #4b5d73;
+  max-width: 520px;
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.place-page__grid {
+  column-count: 3;
+  column-gap: 18px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.place-page__card {
+  width: 100%;
+  margin: 0 0 18px;
+  break-inside: avoid;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 35px rgba(16, 24, 40, 0.12);
+}
+
+.place-page__card .ant-card-body {
+  padding: 0;
+}
+
+.place-page__card .ant-image {
+  width: 100%;
+  display: block;
+}
+
+.place-page__card .ant-image-img {
+  width: 100%;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.place-page__card:hover .ant-image-img {
+  transform: scale(1.02);
+}
+
+.app-footer {
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .place-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .place-page__grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 680px) {
+  .map-page {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .map-page__header {
+    margin-bottom: 20px;
+  }
+
+  .map-page__title {
+    font-size: 26px;
+  }
+
+  .map-page__subtitle {
+    font-size: 14px;
+  }
+
+  .map-page__map {
+    border-radius: 18px;
+  }
+
+  .map-page__pin-button.ant-btn {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .place-page {
+    padding: 24px 16px 40px;
+  }
+
+  .place-page__title {
+    font-size: 26px;
+  }
+
+  .place-page__subtitle {
+    font-size: 14px;
+  }
+
+  .place-page__grid {
+    column-count: 1;
+  }
+
+}

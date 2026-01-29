@@ -1,1 +1,2 @@
-export { MainPage } from './main-page';
+export { MapPage } from './map';
+export { PlacePage } from './place';

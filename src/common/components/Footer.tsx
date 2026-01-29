@@ -7,7 +7,7 @@ import packageData from '@packageSrc';
  * @returns - Компонент
  */
 export const Footer: React.FC = () => (
-  <footer>
+  <footer className="app-footer">
     <div>
       Версия приложения:&nbsp;
       {packageData.version}

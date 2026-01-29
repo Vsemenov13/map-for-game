@@ -1,6 +1,6 @@
 module.exports = {
   // title приложения
-  appName: 'CodingsMercedes',
+  appName: 'map-for-game',
   // Названия приложения для шапки
-  appHeaderName: 'CodingsMercedes',
+  appHeaderName: 'map-for-game',
 };

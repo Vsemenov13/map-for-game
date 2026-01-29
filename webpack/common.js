@@ -31,8 +31,15 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.(eot|png|ttf|svg|woff|woff2)$/,
+        test: /\.(eot|ttf|woff|woff2)$/,
         loader: 'url-loader',
+      },
+      {
+        test: /\.svg$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[name].[contenthash][ext]',
+        },
       },
       {
         test: /\.(png|gif|jpe?g)$/,

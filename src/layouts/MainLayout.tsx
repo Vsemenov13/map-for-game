@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Header, Footer } from '@common/components';
 import {
   ErrorLayout,
   selectors as errorSelectors,
@@ -21,11 +20,9 @@ export const MainLayout: React.FC<LayoutProp> = ({ children }) => {
 
   return (
     <GlobalLoader>
-      <Header />
       <div>
         <main>{errorExist ? <ErrorLayout /> : children}</main>
       </div>
-      <Footer />
     </GlobalLoader>
   );
 };

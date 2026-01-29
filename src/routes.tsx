@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 import React from 'react';
 import { Route, Switch } from 'react-router';
 
-import { MainPage } from '@pages';
+import { MapPage, PlacePage } from '@pages';
 
 /**
  * Компонент с роутами приложения
@@ -14,7 +14,8 @@ export function AppRoutes(): JSX.Element {
     <MainLayout>
       <React.Suspense fallback={<Spin />}>
         <Switch>
-          <Route exact path="/" component={MainPage} />
+          <Route exact path="/" component={MapPage} />
+          <Route exact path="/place/:placeId" component={PlacePage} />
         </Switch>
       </React.Suspense>
     </MainLayout>
