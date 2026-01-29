@@ -4,7 +4,7 @@
   "description": "Карта для игры",
   "scripts": {
     "start": "npm run clean && npm run addAssets && npm run develop",
-    "build": "npm run lint && npm run clean && npm run addAssets && npm run production && npm run clearScss",
+    "build": "npm run lint && npm run clean && npm run addAssets && npm run production",
     "develop": "webpack serve --config ./webpack/app/develop",
     "production": "webpack --config ./webpack/app/production",
     "addAssets": "npx ncp ./public ./dist",
