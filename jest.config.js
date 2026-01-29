@@ -1,0 +1,50 @@
+module.exports = {
+  preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.spec.json',
+    },
+  },
+  testEnvironment: 'jsdom',
+  moduleNameMapper: {
+    '^@root(.*)$': '<rootDir>/src$1',
+    '^@common(.*)$': '<rootDir>/src/common$1',
+    '^@features(.*)$': '<rootDir>/src/features$1',
+    '^@processes(.*)$': '<rootDir>/src/processes$1',
+  },
+  rootDir: '.',
+  collectCoverageFrom: ['<rootDir>/src/*/.ts'],
+  coverageThreshold: {
+    global: {
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80,
+    },
+  },
+  coverageDirectory: './reports/coverage',
+  coverageReporters: ['json', 'lcov', 'text'],
+  roots: ['src'],
+  testResultsProcessor: 'jest-sonar-reporter',
+  coveragePathIgnorePatterns: [
+    'hooks',
+    'index.ts',
+    '.tsx',
+    'types.ts',
+    'constants.ts',
+    'constants',
+    'api.ts',
+    'ducks.ts',
+    'selectors.ts',
+    'actions.ts',
+    'root-reducer.ts',
+    'root-saga.ts',
+    'index.dev.ts',
+    'config.ts',
+  ],
+  transform: {
+    '^.+\\.(t|j)sx?$': 'ts-jest',
+  },
+  cacheDirectory: '<rootDir>/.cache/unit',
+  testMatch: ['<rootDir>/src/*/.test.ts'],
+};
