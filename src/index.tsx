@@ -1,8 +1,8 @@
-import configureStore, { history } from '@store';
-import { ConnectedRouter } from 'connected-react-router';
+import configureStore from '@store';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router } from 'react-router';
 
 import 'antd/dist/antd.css';
 import '@styles/main.css';
@@ -11,15 +11,15 @@ import { AppRoutes } from '@src/routes';
 
 import { actions as initProcessActions } from '@processes/init';
 
-const store = configureStore();
+const { store, history } = configureStore();
 store.dispatch(initProcessActions.initApp());
 
 export const render = (): void => {
   ReactDOM.render(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
+      <Router history={history}>
         <AppRoutes />
-      </ConnectedRouter>
+      </Router>
     </Provider>,
     document.getElementById('app'),
   );

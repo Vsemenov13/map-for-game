@@ -1,17 +1,14 @@
-import { connectRouter } from 'connected-react-router';
-import { createHashHistory } from 'history';
-import { combineReducers } from 'redux';
+import { combineReducers } from '@reduxjs/toolkit';
 
 import { config } from '@common/config';
 import { errorsReducer } from '@common/features/errors';
 import { loadingReducer } from '@common/features/loading';
-
-export const history = createHashHistory();
+import { routerReducer } from '@common/features/router';
 
 const rootReducer = combineReducers({
   [config.modules.errors]: errorsReducer,
   [config.modules.loading]: loadingReducer,
-  [config.modules.router]: connectRouter(history),
+  [config.modules.router]: routerReducer,
 });
 
 export default rootReducer;

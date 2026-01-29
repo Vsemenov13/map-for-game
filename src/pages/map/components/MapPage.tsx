@@ -1,5 +1,5 @@
-import React from 'react';
 import { Col, Row, Space, Typography } from 'antd';
+import React from 'react';
 
 import { places, PlacesMap } from '@features/places';
 

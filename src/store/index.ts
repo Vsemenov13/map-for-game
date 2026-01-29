@@ -1,21 +1,30 @@
 import { configureStore as confStore, EnhancedStore } from '@reduxjs/toolkit';
+import { History } from 'history';
 import createSagaMiddleware from 'redux-saga';
 
 import { config } from '@common/config';
+import { createReduxHistory, routerMiddleware } from '@common/features/router';
 
 import rootReducer from './root-reducer';
 import { rootSaga } from './root-saga';
 
-const configureStore = (preloadedState: unknown = {}): EnhancedStore => {
+const configureStore = (
+  preloadedState: unknown = {},
+): { store: EnhancedStore; history: History } => {
   const sagaMiddleware = createSagaMiddleware();
-  const middleware = [sagaMiddleware];
 
   const store = confStore({
     reducer: rootReducer,
     devTools: process.env.NODE_ENV !== 'production',
     preloadedState,
-    middleware,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }).concat([
+        sagaMiddleware,
+        routerMiddleware,
+      ]),
   });
+
+  const history = createReduxHistory(store);
 
   // Включаем redux-saga middleware
   sagaMiddleware.run(rootSaga);
@@ -26,9 +35,8 @@ const configureStore = (preloadedState: unknown = {}): EnhancedStore => {
     });
   }
 
-  return store;
+  return { store, history };
 };
 
 export default configureStore;
-export { history } from './root-reducer';
 export type RootState = ReturnType<typeof rootReducer>;

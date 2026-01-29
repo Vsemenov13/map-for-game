@@ -1,5 +1,5 @@
-import React from 'react';
 import { Button, Card, Image } from 'antd';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Place } from '../model/types';

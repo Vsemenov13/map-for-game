@@ -1,5 +1,5 @@
-import React from 'react';
 import { Button, Col, Result, Row, Space, Typography } from 'antd';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { getPlaceById, PlaceGallery, places } from '@features/places';
@@ -36,7 +36,11 @@ const PlacePage: React.FC = () => {
 
   return (
     <Space className="place-page" direction="vertical" size="large">
-      <Row className="place-page__header" align="middle" justify="space-between">
+      <Row
+        className="place-page__header"
+        align="middle"
+        justify="space-between"
+      >
         <Col span={24}>
           <Title level={2} className="place-page__title">
             {place.title}
