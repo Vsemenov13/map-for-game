@@ -5,7 +5,6 @@ export const places: Place[] = [
   {
     id: 'village',
     title: 'Деревня',
-    description: 'Небольшая деревня у реки.',
     pin: { top: '3.98%', left: '66.01%' },
     images: [
       {
@@ -18,7 +17,6 @@ export const places: Place[] = [
   {
     id: 'cemetery',
     title: 'Кладбище',
-    description: 'Тихое место на окраине.',
     pin: { top: '4.39%', left: '81.67%' },
     images: [
       {
@@ -31,7 +29,6 @@ export const places: Place[] = [
   {
     id: 'quarry',
     title: 'Карьер',
-    description: 'Карьерный водоем у реки.',
     pin: { top: '44.98%', left: '75.70%' },
     images: [
       {
@@ -44,7 +41,6 @@ export const places: Place[] = [
   {
     id: 'forest',
     title: 'Лес',
-    description: 'Густой лес за пределами поселка.',
     pin: { top: '87.25%', left: '71.18%' },
     images: [
       {
@@ -57,7 +53,6 @@ export const places: Place[] = [
   {
     id: 'kindergarten',
     title: 'Детский сад',
-    description: 'Детский сад внутри поселка.',
     pin: { top: '36.58%', left: '35.74%' },
     images: [
       {
@@ -70,7 +65,6 @@ export const places: Place[] = [
   {
     id: 'playground',
     title: 'Площадка',
-    description: 'Площадка рядом с центром.',
     pin: { top: '40.19%', left: '47.50%' },
     images: [
       {
@@ -83,7 +77,6 @@ export const places: Place[] = [
   {
     id: 'tochki-houses',
     title: 'Дома точки',
-    description: 'Квартал домов точек.',
     pin: { top: '47.95%', left: '50.37%' },
     images: [
       {
@@ -96,7 +89,6 @@ export const places: Place[] = [
   {
     id: 'roof-house',
     title: 'Дома корабли',
-    description: 'Длинные дома.',
     pin: { top: '56.66%', left: '40.12%' },
     images: [
       {
@@ -109,7 +101,6 @@ export const places: Place[] = [
   {
     id: 'market',
     title: 'Рынок',
-    description: 'Рынок у дороги и реки.',
     pin: { top: '57.16%', left: '53.48%' },
     images: [
       {
@@ -122,7 +113,6 @@ export const places: Place[] = [
   {
     id: 'school',
     title: 'Школа',
-    description: 'Школа поселка.',
     pin: { top: '55.03%', left: '28.14%' },
     images: [
       {
@@ -135,7 +125,6 @@ export const places: Place[] = [
   {
     id: 'pool',
     title: 'Бассейн',
-    description: 'Бассейн рядом со школой.',
     pin: { top: '45.43%', left: '23.82%' },
     images: [
       {
@@ -148,7 +137,6 @@ export const places: Place[] = [
   {
     id: 'post',
     title: 'Почта',
-    description: 'Почтовое отделение.',
     pin: { top: '65.33%', left: '27.67%' },
     images: [
       {
@@ -161,7 +149,6 @@ export const places: Place[] = [
   {
     id: 'garages',
     title: 'Гаражи',
-    description: 'Гаражи на юго-западе.',
     pin: { top: '71.59%', left: '17.48%' },
     images: [
       {
@@ -174,7 +161,6 @@ export const places: Place[] = [
   {
     id: 'stadium',
     title: 'Стадион',
-    description: 'Стадион у реки.',
     pin: { top: '73.91%', left: '40.58%' },
     images: [
       {
@@ -187,7 +173,6 @@ export const places: Place[] = [
   {
     id: 'culture-house',
     title: 'Дом культуры',
-    description: 'Дом культуры рядом со стадионом.',
     pin: { top: '61.89%', left: '49.35%' },
     images: [
       {
@@ -198,22 +183,20 @@ export const places: Place[] = [
     ],
   },
   {
-    id: 'river',
-    title: 'Река',
-    description: 'Река вдоль поселка.',
-    pin: { top: '70.89%', left: '56.91%' },
+    id: 'church',
+    title: 'Церковь',
+    pin: { top: '60.89%', left: '26.91%' },
     images: [
       {
-        id: 'river-1',
+        id: 'church-1',
         src: '/map.png',
-        alt: 'Карта. Река.',
+        alt: 'Карта. Церковь.',
       },
     ],
   },
   {
     id: 'ambulatory',
     title: 'Амбулатория',
-    description: 'Амбулатория поселка.',
     pin: { top: '70.04%', left: '33.37%' },
     images: [
       {

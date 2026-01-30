@@ -20,6 +20,35 @@ main {
   overflow-x: visible;
 }
 
+.main-layout {
+  position: relative;
+  min-height: 100vh;
+}
+
+.main-layout__bg {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(1.5px);
+  transform: scale(1.02);
+  z-index: 0;
+}
+
+.main-layout__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.35);
+  z-index: 1;
+}
+
+.main-layout__content {
+  position: relative;
+  z-index: 2;
+}
+
 .app-header,
 .app-footer {
   background: #0f1f3d;
@@ -43,10 +72,11 @@ main {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 0 24px 32px;
   gap: 20px;
   width: 100%;
-  align-items: center;
 }
 
 .map-page.ant-space {

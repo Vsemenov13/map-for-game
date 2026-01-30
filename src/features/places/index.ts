@@ -13,3 +13,5 @@ export type {
   PlacesMapProps,
 } from './types';
 export { getPlaceById } from './utils';
+export { usePlacesManifest } from './hooks';
+export type { PlacesManifest } from './hooks';

@@ -7,6 +7,9 @@ import {
 } from '@common/features/errors';
 import { GlobalLoader } from '@common/features/loading';
 
+/** URL фонового изображения для всех страниц (заблюренное). */
+const LAYOUT_BACKGROUND = '/background.jpg';
+
 type LayoutProp = {
   children: ReactNode | ReactNode[];
 };
@@ -20,8 +23,15 @@ export const MainLayout: React.FC<LayoutProp> = ({ children }) => {
 
   return (
     <GlobalLoader>
-      <div>
-        <main>{errorExist ? <ErrorLayout /> : children}</main>
+      <div className="main-layout">
+        <div
+          className="main-layout__bg"
+          style={{ backgroundImage: `url(${LAYOUT_BACKGROUND})` }}
+          aria-hidden
+        />
+        <main className="main-layout__content">
+          {errorExist ? <ErrorLayout /> : children}
+        </main>
       </div>
     </GlobalLoader>
   );

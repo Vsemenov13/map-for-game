@@ -5,11 +5,10 @@ export type PlaceImage = {
   alt: string;
 };
 
-/** Место на карте: id, название, описание, позиция пина, галерея изображений. */
+/** Место на карте: id, название, позиция пина, галерея изображений. */
 export type Place = {
   id: string;
   title: string;
-  description: string;
   pin: {
     top: string;
     left: string;

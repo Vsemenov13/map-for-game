@@ -2,14 +2,14 @@ import { Button, Col, Result, Row, Space, Typography } from 'antd';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { getPlaceById, PlaceGallery, places } from '@features/places';
+import { getPlaceById, PlaceGallery, places, usePlacesManifest } from '@features/places';
 
 /** Параметры маршрута. */
 type RouteParams = {
   placeId: string;
 };
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 /**
  * Страница выбранного места.
@@ -17,7 +17,9 @@ const { Title, Paragraph } = Typography;
  */
 const PlacePage: React.FC = () => {
   const { placeId } = useParams<RouteParams>();
+  const manifest = usePlacesManifest();
   const place = getPlaceById(places, placeId);
+  const images = (manifest && placeId && manifest[placeId]) ?? place?.images ?? [];
 
   if (!place) {
     return (
@@ -46,18 +48,13 @@ const PlacePage: React.FC = () => {
             {place.title}
           </Title>
         </Col>
-        <Col span={24}>
-          <Paragraph className="place-page__subtitle">
-            {place.description}
-          </Paragraph>
-        </Col>
         <Col span={24} className="place-page__header-action">
           <Link to="/">
             <Button type="default">На карту</Button>
           </Link>
         </Col>
       </Row>
-      <PlaceGallery images={place.images} />
+      <PlaceGallery images={images} />
     </Space>
   );
 };
