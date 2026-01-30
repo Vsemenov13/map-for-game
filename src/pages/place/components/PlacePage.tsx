@@ -1,8 +1,20 @@
 import { Button, Col, Result, Row, Space, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { getPlaceById, PlaceGallery, places, usePlacesManifest } from '@features/places';
+import {
+  Loader,
+  selectors as loadingSelectors,
+  UniversalLoader,
+} from '@common/features/loading';
+
+import {
+  getPlaceById,
+  PlaceGallery,
+  places,
+  placesSelectors,
+  usePlacesActions,
+} from '@features/places';
 
 /** Параметры маршрута. */
 type RouteParams = {
@@ -13,13 +25,21 @@ const { Title } = Typography;
 
 /**
  * Страница выбранного места.
- * @returns Компонент.
+ * При заходе автоматически загружаются изображения папки места с Яндекс.Диска.
+ * @returns — компонент страницы места.
  */
 const PlacePage: React.FC = () => {
+  const { getPlaceImages } = usePlacesActions();
   const { placeId } = useParams<RouteParams>();
-  const manifest = usePlacesManifest();
   const place = getPlaceById(places, placeId);
-  const images = (manifest && placeId && manifest[placeId]) ?? place?.images ?? [];
+  const displayImages = placesSelectors.usePlaceImages(placeId, place);
+  const loading = loadingSelectors.useLoading(Loader.GetPlaceImages);
+
+  useEffect(() => {
+    if (placeId) {
+      getPlaceImages(placeId);
+    }
+  }, [getPlaceImages, placeId]);
 
   if (!place) {
     return (
@@ -37,25 +57,31 @@ const PlacePage: React.FC = () => {
   }
 
   return (
-    <Space className="place-page" direction="vertical" size="large">
-      <Row
-        className="place-page__header"
-        align="middle"
-        justify="space-between"
-      >
-        <Col span={24}>
-          <Title level={2} className="place-page__title">
-            {place.title}
-          </Title>
-        </Col>
-        <Col span={24} className="place-page__header-action">
-          <Link to="/">
-            <Button type="default">На карту</Button>
-          </Link>
-        </Col>
-      </Row>
-      <PlaceGallery images={images} />
-    </Space>
+    <div className="place-page">
+      <UniversalLoader loading={loading}>
+        <div className="place-page__content">
+          <Space direction="vertical" size="large">
+            <Row
+              className="place-page__header"
+              align="middle"
+              justify="space-between"
+            >
+              <Col span={24}>
+                <Title level={2} className="place-page__title">
+                  {place.title}
+                </Title>
+              </Col>
+              <Col span={24} className="place-page__header-action">
+                <Link to="/">
+                  <Button type="default">На карту</Button>
+                </Link>
+              </Col>
+            </Row>
+            <PlaceGallery images={displayImages} />
+          </Space>
+        </div>
+      </UniversalLoader>
+    </div>
   );
 };
 

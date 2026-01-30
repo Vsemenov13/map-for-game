@@ -1,28 +1,18 @@
 import { SagaIterator } from 'redux-saga';
 import { put, all, takeEvery } from 'redux-saga/effects';
 
-import { actions as loadingActions } from '@common/features/loading';
+import { actions as loadingActions, Loader } from '@common/features/loading';
 
 import { actions as initProcessActions } from './actions';
 
 /**
- * Процесс инициализации приложения
- * @returns {void}
+ * Процесс инициализации приложения.
+ * @returns — итератор саги.
  */
 function* initProcess(): SagaIterator {
-  yield put(
-    loadingActions.setLoading({
-      isLoading: true,
-      isGlobal: true,
-    }),
-  );
+  yield put(loadingActions.switchLoading(Loader.Global));
 
-  yield put(
-    loadingActions.setLoading({
-      isLoading: false,
-      isGlobal: false,
-    }),
-  );
+  yield put(loadingActions.switchLoading(Loader.Global));
 }
 
 /**

@@ -1,5 +1,3 @@
-/** Хуки фичи мест (медиа-запрос, блокировка скролла body, манифест изображений). */
+/** Хуки фичи мест (медиа-запрос, блокировка скролла body). */
 export { useMediaQuery } from './useMediaQuery';
 export { useBodyOverflowX } from './useBodyOverflowX';
-export { usePlacesManifest } from './usePlacesManifest';
-export type { PlacesManifest } from './usePlacesManifest';

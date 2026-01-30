@@ -1,6 +1,6 @@
 import type { SyntheticEvent } from 'react';
 
-import type { Place, PlaceImage } from './model/types';
+import type { Place, PlaceImage } from '../model/types';
 
 /** Типы и пропсы компонентов фичи мест. */
 

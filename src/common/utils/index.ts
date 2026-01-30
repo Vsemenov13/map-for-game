@@ -1,2 +1,2 @@
-export { createHttpClient } from './request';
+export { createHttpClient, request } from './request';
 export { formatDate } from './format-date';

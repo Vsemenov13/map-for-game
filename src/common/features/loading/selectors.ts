@@ -1,30 +1,39 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from '@store';
+import type { RootState } from '@store';
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { config } from '@common/config';
 
-import { LoadingState } from './ducks';
+import type { LoaderPayload } from './types';
 
-const loadingSelector = (state: RootState): LoadingState =>
-  state[config.modules.loading];
+const loadingSelector = (state: RootState) => state[config.modules.loading];
 
-/**
- * ## [Селектор] - Включен ли лоадер
- */
-const isLoading = createSelector(
+const makeSomeLoadingSelector = () =>
+  createSelector(
+    loadingSelector,
+    (_: RootState, loaders: LoaderPayload) => loaders,
+    (state, loaders) => {
+      if (Array.isArray(loaders)) {
+        return loaders.some((name) => state[name]);
+      }
+      return !!state[loaders];
+    },
+  );
+
+/** Хук: включён ли хотя бы один из указанных лоадеров. */
+export const useLoading = (loaders: LoaderPayload): boolean => {
+  const selector = useMemo(makeSomeLoadingSelector, []);
+  return useSelector((state: RootState) => selector(state, loaders));
+};
+
+/** Селектор для глобального лоадера (используется в GlobalLoader). */
+export const isGlobal = createSelector(
   loadingSelector,
-  (loading): boolean => loading.isLoading,
-);
-
-/**
- * ## [Селектор] - Включен ли лоадер в глобальном режиме
- */
-const isGlobal = createSelector(
-  loadingSelector,
-  (loading): boolean => loading.isGlobal,
+  (state: Record<string, boolean> | undefined) => !!state?.Global,
 );
 
 export const selectors = {
-  isLoading,
+  useLoading,
   isGlobal,
 };

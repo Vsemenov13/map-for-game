@@ -3,6 +3,7 @@ const createConfig = () => ({
     errors: 'errors' as const,
     loading: 'loading' as const,
     router: 'router' as const,
+    places: 'places' as const,
   },
   environment: process.env.NODE_ENV,
 });

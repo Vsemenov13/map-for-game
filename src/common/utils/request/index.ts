@@ -192,3 +192,6 @@ export const createHttpClient = (apiVersion = 'v1'): HttpClient => {
     patch,
   };
 };
+
+/** Общий экземпляр HTTP-клиента (без префикса версии API). */
+export const request = createHttpClient('');

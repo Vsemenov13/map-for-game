@@ -15,8 +15,8 @@ type LayoutProp = {
 };
 
 /**
- * Базовый макет страницы
- * @returns - Компонент
+ * Базовый макет страницы.
+ * @returns — компонент макета.
  */
 export const MainLayout: React.FC<LayoutProp> = ({ children }) => {
   const errorExist = useSelector(errorSelectors.isErrorExist);

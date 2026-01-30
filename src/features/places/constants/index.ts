@@ -1,3 +1,5 @@
+import type { PlacesState } from '../types/store';
+
 /** Константы фичи мест (карта, брейкпоинты, масштаб). */
 
 /** URL изображения карты. */
@@ -20,3 +22,8 @@ export const MAX_SCALE = 2;
 
 /** Шаг изменения масштаба. */
 export const SCALE_STEP = 0.1;
+
+/** Начальное состояние стора places. */
+export const initialState: PlacesState = {
+  placeImages: {},
+};
