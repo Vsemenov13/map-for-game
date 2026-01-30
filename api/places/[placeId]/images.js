@@ -1,6 +1,6 @@
 /**
- * Vercel Serverless: GET /api/places/:placeId/images — список изображений или прокси одного (при ?index=N).
- * Без index — JSON со списком; с index — стрим файла с Яндекс.Диска (тот же origin).
+ * Vercel Serverless: GET /api/places/:placeId/images — список (JSON) или одно изображение при ?index=N.
+ * Также картинки по пути /api/places/:placeId/images/:index (отдельный обработчик).
  * Переменная окружения: YANDEX_DISK_TOKEN.
  */
 
@@ -67,6 +67,35 @@ function getDownloadLink(filePath, token) {
   return apiRequest(url, token).then((data) => data.href);
 }
 
+function pipeToResponse(downloadUrl, res, contentType) {
+  return new Promise((resolve, reject) => {
+    const follow = (url) => {
+      https
+        .get(url, (response) => {
+          const isRedirect = response.statusCode >= 300 && response.statusCode < 400;
+          const location = response.headers.location;
+          if (isRedirect && location) {
+            const nextUrl = location.startsWith('http') ? location : new URL(location, url).href;
+            follow(nextUrl);
+            return;
+          }
+          if (response.statusCode >= 400) {
+            reject(new Error(`Download: HTTP ${response.statusCode}`));
+            return;
+          }
+          res.setHeader('Content-Type', contentType);
+          res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate');
+          res.status(200);
+          response.pipe(res);
+          response.on('end', resolve);
+          response.on('error', reject);
+        })
+        .on('error', reject);
+    };
+    follow(downloadUrl);
+  });
+}
+
 /**
  * Список файлов-изображений в папке места (отсортированы по имени).
  */
@@ -83,7 +112,7 @@ async function getImageFiles(placeId, token) {
 }
 
 /**
- * Метаданные для списка: id, src (абсолютный URL на хосте, относительный локально), alt.
+ * Метаданные для списка: id, src (URL с индексом в пути: .../images/0), alt.
  */
 function buildImagesList(placeId, filesCount, baseUrl) {
   const title = PLACE_TITLES[placeId] || placeId;
@@ -93,60 +122,42 @@ function buildImagesList(placeId, filesCount, baseUrl) {
   for (let i = 0; i < filesCount; i += 1) {
     images.push({
       id: `${placeId}-${i + 1}`,
-      src: `${prefix}${path}?index=${i}`,
+      src: `${prefix}${path}/${i}`,
       alt: `${title}. Фото ${i + 1}`,
     });
   }
   return images;
 }
 
-function pipeToResponse(downloadUrl, res, contentType) {
-  return new Promise((resolve, reject) => {
-    https
-      .get(downloadUrl, (response) => {
-        if (response.statusCode >= 400) {
-          reject(new Error(`Yandex download: HTTP ${response.statusCode}`));
-          return;
-        }
-        res.setHeader('Content-Type', contentType);
-        res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate');
-        response.pipe(res);
-        response.on('end', resolve);
-        response.on('error', reject);
-      })
-      .on('error', reject);
-  });
-}
-
-function parsePathAndQuery(req) {
+function getPathSegments(req) {
   const raw = req.url || '';
-  let pathname = raw;
-  let search = '';
-  if (raw.includes('?')) {
-    const idx = raw.indexOf('?');
-    pathname = raw.slice(0, idx);
-    search = raw.slice(idx + 1);
-  }
+  let pathname = raw.includes('?') ? raw.slice(0, raw.indexOf('?')) : raw;
   if (pathname.startsWith('http://') || pathname.startsWith('https://')) {
     try {
-      const u = new URL(pathname + (search ? `?${search}` : ''));
-      pathname = u.pathname;
-      search = u.search ? u.search.slice(1) : '';
-    } catch (_) {
-      // оставляем pathname как есть
-    }
+      pathname = new URL(pathname).pathname;
+    } catch (_) {}
   }
-  const segments = pathname.split('/').filter(Boolean);
-  const query = {};
-  if (search) {
+  return pathname.split('/').filter(Boolean);
+}
+
+function getQuery(req) {
+  const raw = req.url || '';
+  const q = {};
+  const query = req.query;
+  if (query && typeof query === 'object') {
+    Object.assign(q, query);
+  }
+  const idx = raw.indexOf('?');
+  if (idx !== -1) {
+    const search = raw.slice(idx + 1);
     search.split('&').forEach((pair) => {
       const eq = pair.indexOf('=');
       const k = eq === -1 ? decodeURIComponent(pair) : decodeURIComponent(pair.slice(0, eq));
       const v = eq === -1 ? '' : decodeURIComponent(pair.slice(eq + 1));
-      if (k) query[k] = v;
+      if (k) q[k] = v;
     });
   }
-  return { segments, query };
+  return q;
 }
 
 module.exports = async (req, res) => {
@@ -162,13 +173,14 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { segments, query } = parsePathAndQuery(req);
+  const segments = getPathSegments(req);
   const placeId = segments[2];
   if (!placeId) {
     res.status(400).json({ error: 'placeId не указан.' });
     return;
   }
 
+  const query = getQuery(req);
   const indexParam = query.index;
   const wantsImage = indexParam !== undefined && indexParam !== '';
 
