@@ -60,6 +60,9 @@ function apiRequest(url, token) {
   });
 }
 
+/**
+ * Список изображений места: только метаданные, src — URL нашего прокси (картинки грузятся с того же origin).
+ */
 async function getPlaceImagesFromDisk(placeId, token) {
   const diskPath = `app:/${placeId}`;
   const listUrl = `${API_BASE}/resources?path=${encodeURIComponent(diskPath)}&limit=500`;
@@ -73,15 +76,9 @@ async function getPlaceImagesFromDisk(placeId, token) {
   const title = PLACE_TITLES[placeId] || placeId;
   const images = [];
   for (let index = 0; index < files.length; index += 1) {
-    const file = files[index];
-    const filePath = file.path || `${diskPath}/${file.name}`;
-    const downloadUrl = `${API_BASE}/resources/download?path=${encodeURIComponent(filePath)}`;
-    const linkData = await apiRequest(downloadUrl, token);
-    const href = linkData.href;
-    if (!href) continue;
     images.push({
       id: `${placeId}-${index + 1}`,
-      src: href,
+      src: `/api/places/${encodeURIComponent(placeId)}/image/${index}`,
       alt: `${title}. Фото ${index + 1}`,
     });
   }

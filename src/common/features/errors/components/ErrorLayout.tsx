@@ -9,9 +9,16 @@ export const ErrorLayout: React.FC = () => {
   const code = useSelector(selectors.errorCode);
 
   return (
-    <>
-      <h1>{title}</h1>
-      <p>{`${code} - ${message}`}</p>
-    </>
+    <div className="error-layout">
+      <div className="error-layout__card">
+        <div className="error-layout__icon" aria-hidden>
+          !
+        </div>
+        <h1 className="error-layout__title">{title}</h1>
+        <p className="error-layout__message">
+          {code ? `${code} — ${message}` : message}
+        </p>
+      </div>
+    </div>
   );
 };
