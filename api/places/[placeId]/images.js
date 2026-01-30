@@ -83,15 +83,17 @@ async function getImageFiles(placeId, token) {
 }
 
 /**
- * Метаданные для списка: id, src (наш URL с ?index=N), alt.
+ * Метаданные для списка: id, src (абсолютный URL на хосте, относительный локально), alt.
  */
-function buildImagesList(placeId, filesCount) {
+function buildImagesList(placeId, filesCount, baseUrl) {
   const title = PLACE_TITLES[placeId] || placeId;
   const images = [];
+  const path = `/api/places/${encodeURIComponent(placeId)}/images`;
+  const prefix = baseUrl || '';
   for (let i = 0; i < filesCount; i += 1) {
     images.push({
       id: `${placeId}-${i + 1}`,
-      src: `/api/places/${encodeURIComponent(placeId)}/images?index=${i}`,
+      src: `${prefix}${path}?index=${i}`,
       alt: `${title}. Фото ${i + 1}`,
     });
   }
@@ -205,8 +207,11 @@ module.exports = async (req, res) => {
   }
 
   try {
+    const protocol = (req.headers['x-forwarded-proto'] || '').toLowerCase() === 'https' ? 'https' : 'http';
+    const host = req.headers['x-forwarded-host'] || req.headers.host || '';
+    const baseUrl = host ? `${protocol}://${host}` : '';
     const files = await getImageFiles(placeId, token);
-    const images = buildImagesList(placeId, files.length);
+    const images = buildImagesList(placeId, files.length, baseUrl);
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
     res.status(200).json({ images });
   } catch (err) {
