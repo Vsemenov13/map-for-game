@@ -1,5 +1,5 @@
-import { Button, Col, Result, Row, Space, Typography } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Col, Drawer, Result, Row, Space, Typography } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import {
@@ -33,12 +33,21 @@ const PlacePage: React.FC = () => {
   const place = getPlaceById(places, placeId);
   const displayImages = placesSelectors.usePlaceImages(placeId, place);
   const loading = loadingSelectors.useLoading(Loader.GetPlaceImages);
+  const [descriptionVisible, setDescriptionVisible] = useState(false);
 
   useEffect(() => {
     if (placeId) {
       getPlaceImages(placeId);
     }
   }, [getPlaceImages, placeId]);
+
+  const showDescription = useCallback(() => {
+    setDescriptionVisible(true);
+  }, []);
+
+  const hideDescription = useCallback(() => {
+    setDescriptionVisible(false);
+  }, []);
 
   if (!place) {
     return (
@@ -57,11 +66,21 @@ const PlacePage: React.FC = () => {
 
   return (
     <div className="place-page">
-      <Link to="/" className="place-page__back-button">
-        <Button type="primary" size="large" className="place-page__back-btn">
-          ← На карту
+      <div className="place-page__top-buttons">
+        <Link to="/" className="place-page__top-button">
+          <Button type="primary" size="large" className="place-page__top-btn">
+            ← На карту
+          </Button>
+        </Link>
+        <Button
+          type="primary"
+          size="large"
+          className="place-page__top-btn"
+          onClick={showDescription}
+        >
+          Описание
         </Button>
-      </Link>
+      </div>
       <div className="place-page__content">
         <Space direction="vertical" size="large">
           <Row
@@ -73,16 +92,28 @@ const PlacePage: React.FC = () => {
               <Title level={2} className="place-page__title">
                 {place.title}
               </Title>
-              {place.description && (
-                <Paragraph className="place-page__subtitle">
-                  {place.description}
-                </Paragraph>
-              )}
             </Col>
           </Row>
           <PlaceGallery images={displayImages} loading={loading} />
         </Space>
       </div>
+      <Drawer
+        title={place.title}
+        placement="right"
+        onClose={hideDescription}
+        open={descriptionVisible}
+        className="place-page__description-drawer"
+      >
+        {place.description ? (
+          <Paragraph className="place-page__description-text">
+            {place.description}
+          </Paragraph>
+        ) : (
+          <Paragraph className="place-page__description-text" type="secondary">
+            Описание отсутствует.
+          </Paragraph>
+        )}
+      </Drawer>
     </div>
   );
 };
