@@ -20,7 +20,7 @@ type RouteParams = {
   placeId: string;
 };
 
-const { Title } = Typography;
+const { Paragraph, Title } = Typography;
 
 /**
  * Страница выбранного места.
@@ -73,6 +73,11 @@ const PlacePage: React.FC = () => {
               <Title level={2} className="place-page__title">
                 {place.title}
               </Title>
+              {place.description && (
+                <Paragraph className="place-page__subtitle">
+                  {place.description}
+                </Paragraph>
+              )}
             </Col>
           </Row>
           <PlaceGallery images={displayImages} loading={loading} />

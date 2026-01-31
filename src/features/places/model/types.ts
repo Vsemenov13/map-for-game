@@ -10,7 +10,7 @@ export type PlaceImage = {
 /** Манифест изображений мест (placeId → массив изображений). */
 export type PlacesManifest = Record<string, PlaceImage[]>;
 
-/** Место на карте: id, название, позиция пина, галерея изображений. */
+/** Место на карте: id, название, позиция пина, галерея изображений, опциональное описание. */
 export type Place = {
   id: string;
   title: string;
@@ -19,4 +19,5 @@ export type Place = {
     left: string;
   };
   images: PlaceImage[];
+  description?: string;
 };
