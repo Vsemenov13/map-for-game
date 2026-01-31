@@ -8,6 +8,14 @@ import type { PlaceImage } from '../model/types';
 const PLACEHOLDER_SRC =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='3' viewBox='0 0 4 3'%3E%3Crect fill='%23f0f0f0' width='4' height='3'/%3E%3C/svg%3E";
 
+/**
+ * Скелетон при загрузке изображения.
+ * @returns Компонент.
+ */
+const ImageLoader: React.FC = () => (
+  <div className="place-page__card-loader" aria-hidden />
+);
+
 /** Пропсы компонента ленивой карточки изображения. */
 type LazyGalleryImageProps = {
   image: PlaceImage;
@@ -36,7 +44,7 @@ export const LazyGalleryImage: React.FC<LazyGalleryImageProps> = ({
     <Image
       src={isVisible ? image.src : PLACEHOLDER_SRC}
       alt={image.alt}
-      placeholder={false}
+      placeholder={isVisible ? <ImageLoader /> : false}
       preview={{ src: image.src }}
       wrapperClassName={aspectRatio ? 'place-page__card-image-fill' : undefined}
     />

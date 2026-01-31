@@ -484,6 +484,19 @@ main {
   object-fit: contain;
 }
 
+.place-page__card-loader {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #c8ced9 25%,
+    #b0b8c6 50%,
+    #c8ced9 75%
+  );
+  background-size: 200% 100%;
+  animation: place-page__skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
 .place-page__card:hover .ant-image-img {
   transform: scale(1.02);
 }
