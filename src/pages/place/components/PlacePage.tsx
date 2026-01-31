@@ -2,11 +2,7 @@ import { Button, Col, Result, Row, Space, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import {
-  Loader,
-  selectors as loadingSelectors,
-  UniversalLoader,
-} from '@common/features/loading';
+import { Loader, selectors as loadingSelectors } from '@common/features/loading';
 
 import {
   getPlaceById,
@@ -58,29 +54,27 @@ const PlacePage: React.FC = () => {
 
   return (
     <div className="place-page">
-      <UniversalLoader loading={loading}>
-        <div className="place-page__content">
-          <Space direction="vertical" size="large">
-            <Row
-              className="place-page__header"
-              align="middle"
-              justify="space-between"
-            >
-              <Col span={24}>
-                <Title level={2} className="place-page__title">
-                  {place.title}
-                </Title>
-              </Col>
-              <Col span={24} className="place-page__header-action">
-                <Link to="/">
-                  <Button type="default">На карту</Button>
-                </Link>
-              </Col>
-            </Row>
-            <PlaceGallery images={displayImages} />
-          </Space>
-        </div>
-      </UniversalLoader>
+      <div className="place-page__content">
+        <Space direction="vertical" size="large">
+          <Row
+            className="place-page__header"
+            align="middle"
+            justify="space-between"
+          >
+            <Col span={24}>
+              <Title level={2} className="place-page__title">
+                {place.title}
+              </Title>
+            </Col>
+            <Col span={24} className="place-page__header-action">
+              <Link to="/">
+                <Button type="default">На карту</Button>
+              </Link>
+            </Col>
+          </Row>
+          <PlaceGallery images={displayImages} loading={loading} />
+        </Space>
+      </div>
     </div>
   );
 };

@@ -51,4 +51,6 @@ export type MapCanvasMobileProps = {
 export type PlaceGalleryProps = {
   /** Список изображений места для отображения в галерее. */
   images: PlaceImage[];
+  /** Признак загрузки изображений (показываются скелетоны карточек). */
+  loading?: boolean;
 };

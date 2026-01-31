@@ -467,6 +467,33 @@ main {
   transform: scale(1.02);
 }
 
+.place-page__card_skeleton {
+  background: #ffffff;
+  pointer-events: none;
+}
+
+.place-page__skeleton-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(
+    90deg,
+    #c8ced9 25%,
+    #b0b8c6 50%,
+    #c8ced9 75%
+  );
+  background-size: 200% 100%;
+  animation: place-page__skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes place-page__skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .app-footer {
   text-align: center;
 }
