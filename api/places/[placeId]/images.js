@@ -1,9 +1,11 @@
 /**
  * GET /api/places/:placeId/images — список изображений места (JSON).
  * В src — URL вида .../image?path=...&mime=...; загрузка картинки без повторного листинга.
+ * width, height — размеры для резервирования места до загрузки (без скачков в masonry).
  */
 
-const { getImageFiles, PLACE_TITLES } = require('../../../lib/yandex-disk');
+const probe = require('probe-image-size');
+const { getDownloadLink, getImageFiles, PLACE_TITLES } = require('../../../lib/yandex-disk');
 
 function getPathSegments(req) {
   const raw = req.url || '';
@@ -53,11 +55,27 @@ module.exports = async (req, res) => {
     const title = PLACE_TITLES[placeId] || placeId;
     const prefix = baseUrl(req);
     const pathPrefix = `/api/places/${encodeURIComponent(placeId)}/image`;
-    const images = files.map((file, i) => ({
-      id: `${placeId}-${i + 1}`,
-      src: `${prefix}${pathPrefix}?path=${encodeURIComponent(file.path || `app:/${placeId}/${file.name}`)}&mime=${encodeURIComponent(file.mime_type || 'image/jpeg')}`,
-      alt: `${title}. Фото ${i + 1}`,
-    }));
+    const diskPath = (file) => file.path || `app:/${placeId}/${file.name}`;
+    const dimensionsList = await Promise.all(
+      files.map(async (file) => {
+        try {
+          const href = await getDownloadLink(diskPath(file), token);
+          const dims = await probe(href);
+          return { width: dims.width, height: dims.height };
+        } catch {
+          return {};
+        }
+      }),
+    );
+    const images = files.map((file, i) => {
+      const { width, height } = dimensionsList[i] || {};
+      return {
+        id: `${placeId}-${i + 1}`,
+        src: `${prefix}${pathPrefix}?path=${encodeURIComponent(diskPath(file))}&mime=${encodeURIComponent(file.mime_type || 'image/jpeg')}`,
+        alt: `${title}. Фото ${i + 1}`,
+        ...(width && height && { width, height }),
+      };
+    });
     res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
     res.status(200).json({ images });
   } catch (err) {

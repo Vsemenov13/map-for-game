@@ -8,8 +8,8 @@ const GALLERY_SKELETON_COUNT = 6;
  */
 export const GallerySkeleton: React.FC = () => (
   <div className="place-page__grid">
-    {Array.from({ length: GALLERY_SKELETON_COUNT }, (_, i) => (
-      <div key={i} className="place-page__card place-page__card_skeleton">
+    {Array.from({ length: GALLERY_SKELETON_COUNT }, (_, index) => (
+      <div key={index} className="place-page__card place-page__card_skeleton">
         <div className="place-page__skeleton-image" />
       </div>
     ))}

@@ -2,7 +2,10 @@ import { Button, Col, Result, Row, Space, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { Loader, selectors as loadingSelectors } from '@common/features/loading';
+import {
+  Loader,
+  selectors as loadingSelectors,
+} from '@common/features/loading';
 
 import {
   getPlaceById,

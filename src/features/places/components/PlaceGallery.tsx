@@ -1,12 +1,13 @@
-import { Card, Image } from 'antd';
+import { Image } from 'antd';
 import React from 'react';
 
-import type { PlaceGalleryProps } from '../types';
-
 import { GallerySkeleton } from './GallerySkeleton';
+import { LazyGalleryImage } from './LazyGalleryImage';
+import type { PlaceGalleryProps } from '../types';
 
 /**
  * Галерея изображений места.
+ * Изображения загружаются по мере скролла через Intersection Observer.
  * @param props - Свойства компонента.
  * @returns Компонент.
  */
@@ -22,14 +23,7 @@ export const PlaceGallery: React.FC<PlaceGalleryProps> = ({
     <Image.PreviewGroup>
       <div className="place-page__grid">
         {images.map((image) => (
-          <Card
-            key={image.id}
-            className="place-page__card"
-            hoverable
-            bordered={false}
-          >
-            <Image src={image.src} alt={image.alt} placeholder={false} />
-          </Card>
+          <LazyGalleryImage key={image.id} image={image} />
         ))}
       </div>
     </Image.PreviewGroup>

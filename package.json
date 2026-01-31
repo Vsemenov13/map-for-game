@@ -39,6 +39,7 @@
     "file-saver": "2.0.5",
     "history": "^4.10.1",
     "merge": "2.1.1",
+    "probe-image-size": "^7.2.3",
     "ramda": "^0.27.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
