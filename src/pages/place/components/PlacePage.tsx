@@ -57,6 +57,11 @@ const PlacePage: React.FC = () => {
 
   return (
     <div className="place-page">
+      <Link to="/" className="place-page__back-button">
+        <Button type="primary" size="large" className="place-page__back-btn">
+          ← На карту
+        </Button>
+      </Link>
       <div className="place-page__content">
         <Space direction="vertical" size="large">
           <Row
@@ -68,11 +73,6 @@ const PlacePage: React.FC = () => {
               <Title level={2} className="place-page__title">
                 {place.title}
               </Title>
-            </Col>
-            <Col span={24} className="place-page__header-action">
-              <Link to="/">
-                <Button type="default">На карту</Button>
-              </Link>
             </Col>
           </Row>
           <PlaceGallery images={displayImages} loading={loading} />
