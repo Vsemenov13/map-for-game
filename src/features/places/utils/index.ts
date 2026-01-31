@@ -1,3 +1,8 @@
-/** Утилиты фичи мест: поиск по id и расчёт размеров карты. */
+/** Утилиты фичи мест. */
 export { getPlaceById } from './get-place-by-id';
-export * from './map-content-size';
+export {
+  clampScale,
+  computeContentSize,
+  getInitialScale,
+} from './map-content-size';
+export { normalizePlace } from './normalize-place';

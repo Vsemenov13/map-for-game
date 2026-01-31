@@ -3,6 +3,8 @@ import { put, all, takeEvery } from 'redux-saga/effects';
 
 import { actions as loadingActions, Loader } from '@common/features/loading';
 
+import { placesActions } from '@features/places';
+
 import { actions as initProcessActions } from './actions';
 
 /**
@@ -11,7 +13,7 @@ import { actions as initProcessActions } from './actions';
  */
 function* initProcess(): SagaIterator {
   yield put(loadingActions.switchLoading(Loader.Global));
-
+  yield put(placesActions.getPlacesConfig());
   yield put(loadingActions.switchLoading(Loader.Global));
 }
 

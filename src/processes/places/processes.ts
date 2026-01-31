@@ -4,7 +4,34 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { actions as errorActions } from '@common/features/errors';
 import { actions as loadingActions, Loader } from '@common/features/loading';
 
-import { placesActions, getPlaceImagesSaga } from '@features/places';
+import {
+  placesActions,
+  getPlaceImagesSaga,
+  getPlacesConfigSaga,
+} from '@features/places';
+
+/**
+ * Процесс загрузки конфига мест с Яндекс.Диска.
+ * @returns — итератор саги.
+ */
+function* getPlacesConfigProcess(): SagaIterator {
+  try {
+    yield put(loadingActions.switchLoading(Loader.GetPlacesConfig));
+    yield call(getPlacesConfigSaga);
+  } catch (error) {
+    yield put(
+      errorActions.setError({
+        title: 'Ошибка загрузки конфига мест',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Не удалось загрузить конфиг мест.',
+      }),
+    );
+  } finally {
+    yield put(loadingActions.switchLoading(Loader.GetPlacesConfig));
+  }
+}
 
 /**
  * Процесс загрузки изображений места: переключает лоадер и вызывает сагу фичи.
@@ -33,9 +60,10 @@ function* getPlaceImagesProcess(
 }
 
 /**
- * Вотчер процесса загрузки изображений мест.
+ * Вотчер процессов фичи places.
  * @returns — итератор саги.
  */
 export function* placesProcessWatcher(): SagaIterator {
+  yield takeEvery(placesActions.getPlacesConfig, getPlacesConfigProcess);
   yield takeEvery(placesActions.getPlaceImages, getPlaceImagesProcess);
 }

@@ -1,7 +1,12 @@
-import { Button, Drawer, Space, Typography } from 'antd';
+import { Button, Drawer, Space, Spin, Typography } from 'antd';
 import React, { useCallback, useState } from 'react';
 
-import { MAP_INTRO_TEXT, places, PlacesMap } from '@features/places';
+import {
+  Loader,
+  selectors as loadingSelectors,
+} from '@common/features/loading';
+
+import { MAP_INTRO_TEXT, PlacesMap, placesSelectors } from '@features/places';
 
 const { Paragraph } = Typography;
 
@@ -11,6 +16,8 @@ const { Paragraph } = Typography;
  */
 const MapPage: React.FC = () => {
   const [descriptionVisible, setDescriptionVisible] = useState(false);
+  const places = placesSelectors.usePlaces();
+  const loading = loadingSelectors.useLoading(Loader.GetPlacesConfig);
 
   const showDescription = useCallback(() => {
     setDescriptionVisible(true);
@@ -19,6 +26,14 @@ const MapPage: React.FC = () => {
   const hideDescription = useCallback(() => {
     setDescriptionVisible(false);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="map-page map-page_loading">
+        <Spin size="large" tip="Загрузка карты..." />
+      </div>
+    );
+  }
 
   return (
     <Space className="map-page" direction="vertical" size="large">

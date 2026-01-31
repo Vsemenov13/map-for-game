@@ -6,8 +6,7 @@ export {
   placesReducer,
   usePlacesActions,
 } from './ducks';
-export { places } from './model';
-export { getPlaceImagesSaga } from './saga';
+export { getPlaceImagesSaga, getPlacesConfigSaga } from './saga';
 export type { Place, PlaceImage } from './model';
 export { selectors as placesSelectors } from './selectors';
 export type {
@@ -16,7 +15,8 @@ export type {
   MapCanvasDesktopProps,
   MapCanvasMobileProps,
   MapPinProps,
-  MapZoomButtonsProps,
+  PlaceImagesResponse,
+  PlacesConfigResponse,
   PlaceGalleryProps,
   PlacesMapProps,
   PlacesState,

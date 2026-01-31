@@ -4,12 +4,20 @@ import { config } from '@common/config';
 import { useActions } from '@common/hooks';
 
 import { initialState } from './constants';
-import type { PlaceImage } from './model';
+import type { Place, PlaceImage } from './model';
 
 const placesSlice = createSlice({
   name: config.modules.places,
   initialState,
   reducers: {
+    /**
+     * Установка списка мест из конфига.
+     * @param state — состояние слайса.
+     * @returns — void.
+     */
+    setPlaces(state, { payload }: PayloadAction<Place[]>) {
+      state.places = payload;
+    },
     /**
      * Установка изображений места в стор.
      * @param state — состояние слайса.
@@ -25,6 +33,11 @@ const placesSlice = createSlice({
   },
 });
 
+/** Экшен запроса загрузки конфига мест (обрабатывается процессом). */
+const getPlacesConfig = createAction(
+  `${config.modules.places}/getPlacesConfig`,
+);
+
 /** Экшен запроса загрузки изображений места (обрабатывается процессом, не редьюсером). */
 const getPlaceImages = createAction<string>(
   `${config.modules.places}/getPlaceImages`,
@@ -32,6 +45,7 @@ const getPlaceImages = createAction<string>(
 export const actions = {
   ...placesSlice.actions,
   getPlaceImages,
+  getPlacesConfig,
 };
 export const placesReducer = placesSlice.reducer;
 

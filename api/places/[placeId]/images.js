@@ -5,7 +5,7 @@
  */
 
 const probe = require('probe-image-size');
-const { getDownloadLink, getImageFiles, PLACE_TITLES } = require('../../../lib/yandex-disk');
+const { getDownloadLink, getImageFiles, getPlaceTitle } = require('../../../lib/yandex-disk');
 
 function getPathSegments(req) {
   const raw = req.url || '';
@@ -51,8 +51,10 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const files = await getImageFiles(placeId, token);
-    const title = PLACE_TITLES[placeId] || placeId;
+    const [files, title] = await Promise.all([
+      getImageFiles(placeId, token),
+      getPlaceTitle(placeId, token),
+    ]);
     const prefix = baseUrl(req);
     const pathPrefix = `/api/places/${encodeURIComponent(placeId)}/image`;
     const diskPath = (file) => file.path || `app:/${placeId}/${file.name}`;

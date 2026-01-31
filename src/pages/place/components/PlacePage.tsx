@@ -1,4 +1,13 @@
-import { Button, Col, Drawer, Result, Row, Space, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Drawer,
+  Result,
+  Row,
+  Space,
+  Spin,
+  Typography,
+} from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -10,7 +19,6 @@ import {
 import {
   getPlaceById,
   PlaceGallery,
-  places,
   placesSelectors,
   usePlacesActions,
 } from '@features/places';
@@ -30,9 +38,11 @@ const { Paragraph, Title } = Typography;
 const PlacePage: React.FC = () => {
   const { getPlaceImages } = usePlacesActions();
   const { placeId } = useParams<RouteParams>();
+  const places = placesSelectors.usePlaces();
   const place = getPlaceById(places, placeId);
   const displayImages = placesSelectors.usePlaceImages(placeId, place);
   const loading = loadingSelectors.useLoading(Loader.GetPlaceImages);
+  const configLoading = loadingSelectors.useLoading(Loader.GetPlacesConfig);
   const [descriptionVisible, setDescriptionVisible] = useState(false);
 
   useEffect(() => {
@@ -48,6 +58,14 @@ const PlacePage: React.FC = () => {
   const hideDescription = useCallback(() => {
     setDescriptionVisible(false);
   }, []);
+
+  if (configLoading) {
+    return (
+      <div className="place-page place-page_loading">
+        <Spin size="large" tip="Загрузка..." />
+      </div>
+    );
+  }
 
   if (!place) {
     return (

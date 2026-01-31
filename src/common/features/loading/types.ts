@@ -2,6 +2,7 @@
 export enum Loader {
   Global = 'Global',
   GetPlaceImages = 'GetPlaceImages',
+  GetPlacesConfig = 'GetPlacesConfig',
 }
 
 /** Состояние фичи loading: флаги по имени лоадера. */

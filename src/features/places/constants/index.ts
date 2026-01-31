@@ -35,5 +35,6 @@ export const SCALE_STEP = 0.1;
 
 /** Начальное состояние стора places. */
 export const initialState: PlacesState = {
+  places: [],
   placeImages: {},
 };

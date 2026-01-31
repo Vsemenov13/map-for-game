@@ -1,3 +1,2 @@
-/** Модель фичи мест: данные и типы. */
-export { places } from './data';
+/** Модель фичи мест: типы. */
 export type { Place, PlaceImage, PlacesManifest } from './types';

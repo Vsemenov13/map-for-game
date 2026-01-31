@@ -7,6 +7,17 @@ import type { Place, PlaceImage } from './model';
 
 const selectPlacesState = (state: RootState) => state[config.modules.places];
 
+/** Список мест из стора (из конфига). */
+export const selectPlaces = (state: RootState): Place[] =>
+  selectPlacesState(state).places;
+
+/**
+ * Хук: список мест из стора.
+ * @returns Список мест.
+ */
+export const usePlaces = (): Place[] =>
+  useSelector((state: RootState) => selectPlaces(state));
+
 /** Изображения места из стора (пустой массив, если ещё не загружены). */
 export const selectPlaceImages = (
   state: RootState,
@@ -31,5 +42,7 @@ export const usePlaceImages = (
 
 export const selectors = {
   selectPlaceImages,
+  selectPlaces,
   usePlaceImages,
+  usePlaces,
 };

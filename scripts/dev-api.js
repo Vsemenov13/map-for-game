@@ -12,8 +12,9 @@ const probe = require('probe-image-size');
 const {
   getImageFiles,
   getDownloadLink,
+  getPlacesConfig,
+  getPlaceTitle,
   pipeToResponse,
-  PLACE_TITLES,
   IMAGE_MIME_PREFIX,
   DEFAULT_MIME,
 } = require('../lib/yandex-disk');
@@ -43,6 +44,23 @@ app.use((_req, res, next) => {
   next();
 });
 
+app.get('/api/places/config', async (req, res) => {
+  const token = process.env.YANDEX_DISK_TOKEN;
+  if (!token) {
+    return res.status(503).json({ error: 'YANDEX_DISK_TOKEN не задан. Добавьте в .env или окружение.' });
+  }
+  try {
+    const config = await getPlacesConfig(token);
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
+    res.status(200).json(config);
+  } catch (err) {
+    const notFound = [404, 'Не найдено', 'Не удалось найти'].some((p) =>
+      (err.message || '').includes(String(p)),
+    );
+    res.status(notFound ? 404 : 500).json({ error: err.message || 'Ошибка загрузки конфига мест.' });
+  }
+});
+
 app.get('/api/places/:placeId/images', async (req, res) => {
   const token = process.env.YANDEX_DISK_TOKEN;
   if (!token) {
@@ -50,8 +68,10 @@ app.get('/api/places/:placeId/images', async (req, res) => {
   }
   const placeId = req.params.placeId;
   try {
-    const files = await getImageFiles(placeId, token);
-    const title = PLACE_TITLES[placeId] || placeId;
+    const [files, title] = await Promise.all([
+      getImageFiles(placeId, token),
+      getPlaceTitle(placeId, token),
+    ]);
     const baseUrl = `${req.protocol}://${req.get('host')}`;
     const pathPrefix = `/api/places/${encodeURIComponent(placeId)}/image`;
     const diskPath = (file) => file.path || `app:/${placeId}/${file.name}`;
